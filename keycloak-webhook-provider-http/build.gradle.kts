@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     kotlin("jvm")
     id("org.openapi.generator") version "7.22.0"
@@ -21,7 +19,7 @@ dependencies {
     implementation("org.keycloak", "keycloak-services", "26.4.0")
 
     implementation("com.google.code.gson", "gson", "2.12.1")
-    
+
     implementation("com.squareup.okhttp3", "okhttp", "4.12.0")
     implementation("com.squareup.okio", "okio-jvm", "3.10.2")
     implementation("org.slf4j", "slf4j-log4j12", "2.0.17")
@@ -51,7 +49,7 @@ openApiGenerate {
     modelPackage.set("$openapiPackageName.model")
 
     httpUserAgent.set("Keycloak/Kotlin")
-    
+
     configOptions.set(
         mutableMapOf(
             "dateLibrary" to "java8",
@@ -80,11 +78,10 @@ tasks {
         dependsOn(openApiGenerate)
     }
 
-    val shadowJar by existing(ShadowJar::class) {
+    shadowJar {
         dependencies {
             include(dependency("com.squareup.okhttp3:okhttp"))
             include(dependency("com.squareup.okio:okio-jvm"))
         }
-        dependsOn(build)
     }
 }
