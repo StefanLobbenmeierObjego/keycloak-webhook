@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Webhook UI Stub</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-border: #334155;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --danger: #f87171;
+      --input: #020617;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: linear-gradient(180deg, #020617, #0f172a 30%, #111827 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .hero {
+      margin-bottom: 24px;
+      padding: 24px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 20px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%), rgba(15, 23, 42, 0.9);
+    }
+
+    h1, h2 {
+      margin: 0;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 820px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .badge {
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid var(--panel-border);
+      border-radius: 18px;
+      padding: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-top: 0;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #475569;
+      background: var(--input);
+      color: var(--text);
+      padding: 10px 12px;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .inline-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .inline-toggle input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: inherit;
+      cursor: pointer;
+      color: #020617;
+      background: var(--accent);
+      font-weight: 700;
+    }
+
+    button.secondary {
+      color: var(--text);
+      background: transparent;
+      border: 1px solid #475569;
+    }
+
+    .status {
+      margin-top: 18px;
+      min-height: 24px;
+      color: var(--muted);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    pre {
+      margin: 20px 0 0;
+      padding: 16px;
+      overflow: auto;
+      background: rgba(2, 6, 23, 0.85);
+      border-radius: 14px;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Webhook UI Stub</h1>
+      <p class="subtitle">
+        Realm <strong>__REALM_NAME__</strong>. This page is served directly by the provider as a demo admin UI. It exercises a stub
+        backend config endpoint and shows how the configuration can be split into General, HTTP, AMQP, and Syslog modules.
+      </p>
+      <div class="badge-row" id="provider-badges"></div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>General</h2>
+        <p>Shared options that apply across all transports.</p>
+        <div class="field">
+          <label for="eventsTaken">Events taken</label>
+          <textarea id="eventsTaken" placeholder="LOGIN, REGISTER, LOGOUT"></textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>HTTP</h2>
+        <div class="inline-toggle">
+          <input id="httpEnabled" type="checkbox">
+          <label for="httpEnabled">Enabled</label>
+        </div>
+        <div class="field">
+          <label for="httpBaseUrls">Base URLs</label>
+          <textarea id="httpBaseUrls" placeholder="https://example/webhook"></textarea>
+        </div>
+        <div class="field">
+          <label for="httpUsername">Username</label>
+          <input id="httpUsername" type="text">
+        </div>
+        <div class="field">
+          <label for="httpPassword">Password</label>
+          <input id="httpPassword" type="password">
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>AMQP</h2>
+        <div class="inline-toggle">
+          <input id="amqpEnabled" type="checkbox">
+          <label for="amqpEnabled">Enabled</label>
+        </div>
+        <div class="field"><label for="amqpHost">Host</label><input id="amqpHost" type="text"></div>
+        <div class="field"><label for="amqpPort">Port</label><input id="amqpPort" type="number"></div>
+        <div class="field"><label for="amqpVHost">Virtual host</label><input id="amqpVHost" type="text"></div>
+        <div class="field"><label for="amqpExchange">Exchange</label><input id="amqpExchange" type="text"></div>
+        <div class="field"><label for="amqpUsername">Username</label><input id="amqpUsername" type="text"></div>
+        <div class="field"><label for="amqpPassword">Password</label><input id="amqpPassword" type="password"></div>
+        <div class="inline-toggle">
+          <input id="amqpSsl" type="checkbox">
+          <label for="amqpSsl">SSL</label>
+        </div>
+        <div class="inline-toggle">
+          <input id="amqpPublisherConfirm" type="checkbox">
+          <label for="amqpPublisherConfirm">Publisher confirm</label>
+        </div>
+        <div class="field"><label for="amqpPublisherConfirmTimeout">Confirm timeout ms</label><input id="amqpPublisherConfirmTimeout" type="number"></div>
+      </section>
+
+      <section class="card">
+        <h2>Syslog</h2>
+        <div class="inline-toggle">
+          <input id="syslogEnabled" type="checkbox">
+          <label for="syslogEnabled">Enabled</label>
+        </div>
+        <div class="field"><label for="syslogProtocol">Protocol</label><select id="syslogProtocol"><option>UDP</option><option>TCP</option></select></div>
+        <div class="field"><label for="syslogHostname">Hostname</label><input id="syslogHostname" type="text"></div>
+        <div class="field"><label for="syslogAppName">App name</label><input id="syslogAppName" type="text"></div>
+        <div class="field"><label for="syslogFacility">Facility</label><input id="syslogFacility" type="text"></div>
+        <div class="field"><label for="syslogSeverity">Severity</label><input id="syslogSeverity" type="text"></div>
+        <div class="field"><label for="syslogServerHostname">Server hostname</label><input id="syslogServerHostname" type="text"></div>
+        <div class="field"><label for="syslogServerPort">Server port</label><input id="syslogServerPort" type="number"></div>
+        <div class="field"><label for="syslogMessageFormat">Message format</label><input id="syslogMessageFormat" type="text"></div>
+      </section>
+    </div>
+
+    <div class="actions">
+      <button id="saveButton" type="button">Save Stub Config</button>
+      <button id="reloadButton" class="secondary" type="button">Reload From Server</button>
+    </div>
+    <div class="status" id="status"></div>
+    <pre id="preview"></pre>
+  </div>
+
+  <script>
+    const basePath = window.location.pathname.replace(/\/$/, "");
+    const configUrl = `${basePath}/config`;
+    const metaUrl = `${basePath}/meta`;
+
+    const form = {
+      eventsTaken: document.getElementById("eventsTaken"),
+      httpEnabled: document.getElementById("httpEnabled"),
+      httpBaseUrls: document.getElementById("httpBaseUrls"),
+      httpUsername: document.getElementById("httpUsername"),
+      httpPassword: document.getElementById("httpPassword"),
+      amqpEnabled: document.getElementById("amqpEnabled"),
+      amqpHost: document.getElementById("amqpHost"),
+      amqpPort: document.getElementById("amqpPort"),
+      amqpVHost: document.getElementById("amqpVHost"),
+      amqpExchange: document.getElementById("amqpExchange"),
+      amqpUsername: document.getElementById("amqpUsername"),
+      amqpPassword: document.getElementById("amqpPassword"),
+      amqpSsl: document.getElementById("amqpSsl"),
+      amqpPublisherConfirm: document.getElementById("amqpPublisherConfirm"),
+      amqpPublisherConfirmTimeout: document.getElementById("amqpPublisherConfirmTimeout"),
+      syslogEnabled: document.getElementById("syslogEnabled"),
+      syslogProtocol: document.getElementById("syslogProtocol"),
+      syslogHostname: document.getElementById("syslogHostname"),
+      syslogAppName: document.getElementById("syslogAppName"),
+      syslogFacility: document.getElementById("syslogFacility"),
+      syslogSeverity: document.getElementById("syslogSeverity"),
+      syslogServerHostname: document.getElementById("syslogServerHostname"),
+      syslogServerPort: document.getElementById("syslogServerPort"),
+      syslogMessageFormat: document.getElementById("syslogMessageFormat")
+    };
+
+    const statusNode = document.getElementById("status");
+    const previewNode = document.getElementById("preview");
+    const badgesNode = document.getElementById("provider-badges");
+
+    function setStatus(message, isError = false) {
+      statusNode.textContent = message;
+      statusNode.className = isError ? "status error" : "status";
+    }
+
+    function lines(text) {
+      return text
+        .split(/\r?\n|,/)
+        .map((value) => value.trim())
+        .filter(Boolean);
+    }
+
+    function readForm() {
+      return {
+        general: {
+          eventsTaken: lines(form.eventsTaken.value)
+        },
+        http: {
+          enabled: form.httpEnabled.checked,
+          baseUrls: lines(form.httpBaseUrls.value),
+          username: form.httpUsername.value,
+          password: form.httpPassword.value
+        },
+        amqp: {
+          enabled: form.amqpEnabled.checked,
+          host: form.amqpHost.value,
+          port: Number(form.amqpPort.value || 0),
+          vHost: form.amqpVHost.value,
+          exchange: form.amqpExchange.value,
+          username: form.amqpUsername.value,
+          password: form.amqpPassword.value,
+          ssl: form.amqpSsl.checked,
+          usePublisherConfirm: form.amqpPublisherConfirm.checked,
+          publisherConfirmTimeout: Number(form.amqpPublisherConfirmTimeout.value || 0)
+        },
+        syslog: {
+          enabled: form.syslogEnabled.checked,
+          protocol: form.syslogProtocol.value,
+          hostname: form.syslogHostname.value,
+          appName: form.syslogAppName.value,
+          facility: form.syslogFacility.value,
+          severity: form.syslogSeverity.value,
+          serverHostname: form.syslogServerHostname.value,
+          serverPort: Number(form.syslogServerPort.value || 0),
+          messageFormat: form.syslogMessageFormat.value
+        }
+      };
+    }
+
+    function fillForm(config) {
+      form.eventsTaken.value = (config.general.eventsTaken || []).join("\n");
+      form.httpEnabled.checked = !!config.http.enabled;
+      form.httpBaseUrls.value = (config.http.baseUrls || []).join("\n");
+      form.httpUsername.value = config.http.username || "";
+      form.httpPassword.value = config.http.password || "";
+      form.amqpEnabled.checked = !!config.amqp.enabled;
+      form.amqpHost.value = config.amqp.host || "";
+      form.amqpPort.value = config.amqp.port ?? 0;
+      form.amqpVHost.value = config.amqp.vHost || "";
+      form.amqpExchange.value = config.amqp.exchange || "";
+      form.amqpUsername.value = config.amqp.username || "";
+      form.amqpPassword.value = config.amqp.password || "";
+      form.amqpSsl.checked = !!config.amqp.ssl;
+      form.amqpPublisherConfirm.checked = !!config.amqp.usePublisherConfirm;
+      form.amqpPublisherConfirmTimeout.value = config.amqp.publisherConfirmTimeout ?? 0;
+      form.syslogEnabled.checked = !!config.syslog.enabled;
+      form.syslogProtocol.value = config.syslog.protocol || "UDP";
+      form.syslogHostname.value = config.syslog.hostname || "";
+      form.syslogAppName.value = config.syslog.appName || "";
+      form.syslogFacility.value = config.syslog.facility || "";
+      form.syslogSeverity.value = config.syslog.severity || "";
+      form.syslogServerHostname.value = config.syslog.serverHostname || "";
+      form.syslogServerPort.value = config.syslog.serverPort ?? 0;
+      form.syslogMessageFormat.value = config.syslog.messageFormat || "";
+
+      previewNode.textContent = JSON.stringify(config, null, 2);
+    }
+
+    async function loadMeta() {
+      const response = await fetch(metaUrl, { headers: { Accept: "application/json" } });
+      if (!response.ok) {
+        throw new Error(`Failed to load meta: ${response.status}`);
+      }
+
+      const meta = await response.json();
+      badgesNode.innerHTML = "";
+      Object.entries(meta.providers || {}).forEach(([provider, enabled]) => {
+        const node = document.createElement("span");
+        node.className = "badge";
+        node.textContent = `${provider}: ${enabled ? "installed" : "missing"}`;
+        badgesNode.appendChild(node);
+      });
+    }
+
+    async function loadConfig() {
+      setStatus("Loading config...");
+      const response = await fetch(configUrl, { headers: { Accept: "application/json" } });
+      if (!response.ok) {
+        throw new Error(`Failed to load config: ${response.status}`);
+      }
+
+      const config = await response.json();
+      fillForm(config);
+      setStatus("Config loaded from realm attribute stub.");
+    }
+
+    async function saveConfig() {
+      const payload = readForm();
+      previewNode.textContent = JSON.stringify(payload, null, 2);
+      setStatus("Saving config...");
+
+      const response = await fetch(configUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save config: ${response.status}`);
+      }
+
+      const saved = await response.json();
+      fillForm(saved);
+      setStatus("Config saved to the stub endpoint.");
+    }
+
+    document.getElementById("saveButton").addEventListener("click", () => {
+      saveConfig().catch((error) => setStatus(error.message, true));
+    });
+
+    document.getElementById("reloadButton").addEventListener("click", () => {
+      loadConfig().catch((error) => setStatus(error.message, true));
+    });
+
+    Promise.all([loadMeta(), loadConfig()]).catch((error) => setStatus(error.message, true));
+  </script>
+</body>
+</html>
