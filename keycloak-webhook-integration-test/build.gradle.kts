@@ -28,6 +28,7 @@ tasks.test {
         ":keycloak-webhook-provider-core:shadowJar",
         ":keycloak-webhook-provider-http:shadowJar",
         ":keycloak-webhook-provider-amqp:shadowJar",
-        ":keycloak-webhook-provider-syslog:shadowJar"
+        ":keycloak-webhook-provider-syslog:shadowJar",
+        ":keycloak-webhook-admin-theme:themeJar"
     )
 }

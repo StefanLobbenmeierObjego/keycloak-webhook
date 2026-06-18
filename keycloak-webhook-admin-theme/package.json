@@ -1,0 +1,30 @@
+{
+  "name": "keycloak-webhook-admin-theme",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@keycloak/keycloak-admin-client": "26.6.3",
+    "@keycloak/keycloak-admin-ui": "26.6.3",
+    "@keycloak/keycloak-ui-shared": "26.6.3",
+    "@patternfly/patternfly": "^5.4.2",
+    "@patternfly/react-core": "^5.4.14",
+    "i18next": "^25.7.3",
+    "i18next-fetch-backend": "^7.0.0",
+    "keycloak-js": "^26.2.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.70.0",
+    "react-i18next": "^16.5.1",
+    "react-router-dom": "^6.30.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react-swc": "^4.2.2",
+    "typescript": "^5.9.2",
+    "vite": "^7.3.3"
+  }
+}

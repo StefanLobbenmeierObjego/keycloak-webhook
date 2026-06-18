@@ -1,0 +1,8 @@
+{
+  "themes": [
+    {
+      "name": "keycloak-webhook",
+      "types": ["admin"]
+    }
+  ]
+}
