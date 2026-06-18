@@ -2,6 +2,7 @@ package com.vymalo.keycloak.webhook.http
 
 import com.vymalo.keycloak.openapi.client.handler.WebhookApi
 import com.vymalo.keycloak.openapi.client.infrastructure.ApiClient
+import com.vymalo.keycloak.webhook.core.WebhookConfigProvider
 import com.vymalo.keycloak.webhook.core.WebhookHandler
 import com.vymalo.keycloak.webhook.core.WebhookPayload
 import com.vymalo.keycloak.webhook.http.models.HttpConfig
@@ -41,8 +42,8 @@ class HttpWebhookHandler : WebhookHandler {
 
     override fun getId(): String = PROVIDER_ID
 
-    override fun initHandler() {
-        val http = HttpConfig.fromEnv()
+    override fun initHandler(configProvider: WebhookConfigProvider) {
+        val http = HttpConfig.fromEnv(configProvider)
 
         ApiClient.username = http.username
         ApiClient.password = http.password

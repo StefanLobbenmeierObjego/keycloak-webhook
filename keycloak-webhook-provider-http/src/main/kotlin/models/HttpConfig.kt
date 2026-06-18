@@ -1,5 +1,7 @@
 package com.vymalo.keycloak.webhook.http.models
 
+import com.vymalo.keycloak.webhook.core.DefaultWebhookConfigProvider
+import com.vymalo.keycloak.webhook.core.WebhookConfigProvider
 import com.vymalo.keycloak.webhook.core.helper.*
 
 data class HttpConfig(
@@ -8,11 +10,10 @@ data class HttpConfig(
     val baseUrls: List<String>,
 ) {
     companion object {
-        fun fromEnv(): HttpConfig = HttpConfig(
-            username = httpAuthUsernameKey.cf(),
-            password = httpAuthPasswordKey.cf(),
-            baseUrls = httpBaseBathKey.cff().split(',')
+        fun fromEnv(configProvider: WebhookConfigProvider = DefaultWebhookConfigProvider()): HttpConfig = HttpConfig(
+            username = httpAuthUsernameKey.cf(configProvider),
+            password = httpAuthPasswordKey.cf(configProvider),
+            baseUrls = httpBaseBathKey.cff(configProvider).split(',')
         )
     }
 }
-

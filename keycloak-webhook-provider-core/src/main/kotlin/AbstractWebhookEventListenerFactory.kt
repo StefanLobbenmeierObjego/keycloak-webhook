@@ -9,6 +9,8 @@ import org.keycloak.events.EventListenerProviderFactory
 import org.keycloak.events.admin.AdminEvent
 import org.keycloak.models.KeycloakSession
 import org.keycloak.models.KeycloakSessionFactory
+import org.keycloak.provider.ProviderConfigProperty
+import org.keycloak.provider.ProviderConfigurationBuilder
 import org.keycloak.provider.ServerInfoAwareProviderFactory
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
@@ -24,21 +26,36 @@ abstract class AbstractWebhookEventListenerFactory(
     override fun getOperationalInfo() = mapOf("version" to "0.10.0-rc.1")
 
     companion object {
+        private val COMMON_CONFIG_PROPERTIES = ProviderConfigurationBuilder.create()
+            .property()
+            .name(eventsTakenKey)
+            .label("Events filter")
+            .helpText("Comma-separated list of user/admin event types to forward. Leave empty to forward all events.")
+            .type(ProviderConfigProperty.STRING_TYPE)
+            .add()
+            .build()
+
         @JvmStatic
         private val LOG = LoggerFactory.getLogger(AbstractWebhookEventListenerFactory::class.java)
     }
 
+    override fun getConfigMetadata(): List<ProviderConfigProperty> =
+        COMMON_CONFIG_PROPERTIES + getAdditionalConfigMetadata()
+
+    protected open fun getAdditionalConfigMetadata(): List<ProviderConfigProperty> = emptyList()
+
     override fun create(session: KeycloakSession): EventListenerProvider {
-        ensureParametersInit()
+        ensureParametersInit(session)
         return this
     }
 
     @Synchronized
-    private fun ensureParametersInit() {
+    private fun ensureParametersInit(session: KeycloakSession) {
         synchronized(delegate) {
-            delegate.initHandler()
+            val configProvider = RealmComponentWebhookConfigProvider(session, delegate.getId())
+            delegate.initHandler(configProvider)
 
-            takeList = eventsTakenKey.cf()
+            takeList = eventsTakenKey.cf(configProvider)
                 ?.trim()
                 ?.split(",")
                 ?.map { it.trim() }

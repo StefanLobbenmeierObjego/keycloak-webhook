@@ -4,5 +4,5 @@ interface WebhookHandler {
     fun sendWebhook(request: WebhookPayload)
     fun close() {}
     fun getId(): String
-    fun initHandler() {}
+    fun initHandler(configProvider: WebhookConfigProvider = DefaultWebhookConfigProvider()) {}
 }

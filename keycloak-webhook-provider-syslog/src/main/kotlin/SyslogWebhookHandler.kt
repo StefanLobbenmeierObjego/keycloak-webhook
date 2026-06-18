@@ -4,6 +4,7 @@ import com.cloudbees.syslog.sender.AbstractSyslogMessageSender
 import com.cloudbees.syslog.sender.TcpSyslogMessageSender
 import com.cloudbees.syslog.sender.UdpSyslogMessageSender
 import com.google.gson.Gson
+import com.vymalo.keycloak.webhook.core.WebhookConfigProvider
 import com.vymalo.keycloak.webhook.core.WebhookHandler
 import com.vymalo.keycloak.webhook.core.WebhookPayload
 import com.vymalo.keycloak.webhook.syslog.models.SyslogConfig
@@ -42,8 +43,8 @@ class SyslogWebhookHandler : WebhookHandler {
         }.onFailure { logger.warn("Error closing channel", it) }
     }
 
-    override fun initHandler() {
-        val syslogConfig = SyslogConfig.fromEnv()
+    override fun initHandler(configProvider: WebhookConfigProvider) {
+        val syslogConfig = SyslogConfig.fromEnv(configProvider)
 
         val messageSender = when (syslogConfig.protocol) {
             "TCP" -> TcpSyslogMessageSender()

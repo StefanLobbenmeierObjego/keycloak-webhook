@@ -6,6 +6,7 @@ import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.vymalo.keycloak.webhook.amqp.models.AmqpConfig
+import com.vymalo.keycloak.webhook.core.WebhookConfigProvider
 import com.vymalo.keycloak.webhook.core.WebhookHandler
 import com.vymalo.keycloak.webhook.core.WebhookPayload
 import org.keycloak.utils.MediaType
@@ -132,8 +133,8 @@ class AmqpWebhookHandler : WebhookHandler {
     }
 
 
-    override fun initHandler() {
-        val amqp = AmqpConfig.fromEnv()
+    override fun initHandler(configProvider: WebhookConfigProvider) {
+        val amqp = AmqpConfig.fromEnv(configProvider)
 
         exchange = amqp.exchange
         usePublisherConfirm = amqp.usePublisherConfirm

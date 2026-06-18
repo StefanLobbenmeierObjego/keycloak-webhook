@@ -1,5 +1,8 @@
 package com.vymalo.keycloak.webhook.core.helper
 
+import com.vymalo.keycloak.webhook.core.DefaultWebhookConfigProvider
+import com.vymalo.keycloak.webhook.core.WebhookConfigProvider
+
 const val eventsTakenKey = "WEBHOOK_EVENTS_TAKEN"
 
 const val httpBaseBathKey = "WEBHOOK_HTTP_BASE_PATH"
@@ -25,9 +28,10 @@ const val syslogServerHostname = "WEBHOOK_SYSLOG_SERVER_HOSTNAME"
 const val syslogServerPort = "WEBHOOK_SYSLOG_SERVER_PORT"
 const val syslogMessageFormat = "WEBHOOK_SYSLOG_MESSAGE_FORMAT"
 
-private fun getConfig(key: String): String? = System.getenv(key) ?: System.getProperty(key)
+private val defaultConfigProvider = DefaultWebhookConfigProvider()
 
-fun String.cf() = getConfig(this)
-fun String.bf(compare: String = "true") = this.cf() == compare
-fun String.cff() = getConfig(this)!!
-fun String.cfe(defaultValue: () -> String) = getConfig(this).orEmpty().ifEmpty(defaultValue)
+fun String.cf(configProvider: WebhookConfigProvider = defaultConfigProvider) = configProvider.getConfig(this)
+fun String.bf(compare: String = "true", configProvider: WebhookConfigProvider = defaultConfigProvider) = this.cf(configProvider) == compare
+fun String.cff(configProvider: WebhookConfigProvider = defaultConfigProvider) = configProvider.getConfig(this)!!
+fun String.cfe(defaultValue: () -> String, configProvider: WebhookConfigProvider = defaultConfigProvider) =
+    configProvider.getConfig(this).orEmpty().ifEmpty(defaultValue)
