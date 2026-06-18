@@ -37,6 +37,10 @@ The Keycloak Webhook Plugin consists of four modules:
 Keycloak uses Java's `ServiceLoader` mechanism to conditionally load these providers at runtime if their JARs (and
 dependencies) are available.
 
+The webhook configuration UI is exposed as a supported custom realm endpoint at
+`/realms/{realm}/webhook-ui` with companion JSON endpoints under `/realms/{realm}/webhook-ui/config` and
+`/realms/{realm}/webhook-ui/meta`.
+
 ---
 
 ## 2. How to Use It
